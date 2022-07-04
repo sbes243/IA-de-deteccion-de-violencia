@@ -16,5 +16,9 @@ Cada etapa en la preparación del proyecto se muestra en la siguiente imagen:
 El modelo 3D CNN se entrenó de forma personalizada utilizando la arquitectura que se muestra a continuación:
 
 ### Conjuntos de datos
+Se combinaron tres bases de datos para esta tarea: [Violencia en deportes](http://academictorrents.com/details/38d9ed996a5a75a039b84cf8a137be794e7cee89/tech),[Peliculas](http://academictorrents.com/details/70e0794e2292fc051a13f05ea6f5b6c16f3d3635) y [Violencia en espacios públicos](https://www.openu.ac.il/home/hassner/data/violentflows/).
 
+La base de datos de Hockey Fight contenía 1000 videoclips, la mitad con escenas violentas y la otra no violenta. La base de datos de Películas contenía 200 videoclips, la mitad con escenas violentas y la otra no violenta. La base de datos de violencia de la multitud contenía 246 videoclips de YouTube, la mitad con escenas violentas y la otra no violenta. Esto dio un total de 1446 videos, con 723 videos de violencia y no violencia.
+
+Los frames de imagen se extraen de estos videos usando el script en `/data/video2img.sh`(obtenido de [JJBOY](https://github.com/JJBOY/C3D-pytorch)) a una frecuencia de muestreo de 16 fotogramas por segundo. Este valor fue elegido arbitrariamente y es lo suficientemente bueno para empezar. Luego, los diferentes marcos de imagen se recopilan en pilas con 16 marcos por pila usando `/data/create_stacks.py` utilizando la información proporcionada en `/data/train.txt` y `/data/test.txt` que especifica el punto de partida de cada pila. Esto era necesario ya que las tramas se enviaban en secuencias superpuestas.
 
