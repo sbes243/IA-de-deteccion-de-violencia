@@ -22,3 +22,21 @@ La base de datos de Hockey Fight contenía 1000 videoclips, la mitad con escenas
 
 Los frames de imagen se extraen de estos videos usando el script en `/data/video2img.sh`(obtenido de [JJBOY](https://github.com/JJBOY/C3D-pytorch)) a una frecuencia de muestreo de 16 fotogramas por segundo. Este valor fue elegido arbitrariamente y es lo suficientemente bueno para empezar. Luego, los diferentes marcos de imagen se recopilan en pilas con 16 marcos por pila usando `/data/create_stacks.py` utilizando la información proporcionada en `/data/train.txt` y `/data/test.txt` que especifica el punto de partida de cada pila. Esto era necesario ya que las tramas se enviaban en secuencias superpuestas.
 
+Todo el conjunto de base de datos se dividió en conjunto de entrenamiento y conjunto de prueba en una proporción de 3:1. Esto fue de acuerdo con el método en [1].Luego, ambos conjuntos se empaquetaron en el formato HDF5 usando el paquete `h5py`.
+
+### Preprocesamiento de datos
+
+Primero se cambia el tamaño de cada pila de imágenes a 128 por 171 píxeles antes de recortarlas a 112 por 112 píxeles de acuerdo con la forma de entrada de la CNN 3D. Luego se convierten a tensores PyTorch y cada uno de los marcos RGB se normaliza con `mean=[0.485, 0.456, 0.406]` y `std=[0.229, 0.224, 0.225]`. Esta es una práctica de transformación común que se deriva de la normalización introducida por ImageNet.
+
+### Hiperparámetros y Optimización
+
+Para la tarea de entrenamiento se utilizaron los siguientes hiperparámetros:
+
+* `num_epochs = 100`
+* `tamaño_lote = 30`
+* `tasa_de_aprendizaje = 0.003`
+
+Estos parámetros no son de ninguna manera óptimos, pero dieron un resultado bastante bueno para empezar.
+
+El optimizador de descenso de gradiente estocástico se utilizó para el aprendizaje con la función Cross Entropy como criterio para la pérdida de clasificación.
+
